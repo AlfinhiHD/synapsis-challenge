@@ -9,7 +9,7 @@ import { formatApiErrors } from '@/utils/apiError';
 const { TextArea } = Input;
 
 interface PostFormProps {
-  initialData?: PostType;
+  initialData?: PostType | null;
   onSubmit: () => void;
 }
 
@@ -79,7 +79,7 @@ export const PostForm: React.FC<PostFormProps> = ({ initialData, onSubmit }) => 
     <Form
       form={form}
       layout="vertical"
-      initialValues={initialData}
+      initialValues={initialData ?? undefined}
       onFinish={handleSubmit}
     >
       <Form.Item

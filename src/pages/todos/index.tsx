@@ -24,9 +24,15 @@ const TodosPage = () => {
     queryFn: () => 
       selectedUser?.id 
         ? todoApi.getUserTodos(selectedUser.id, page, pageSize)
-        : Promise.resolve({ data: [], headers: { 'x-pagination-total': '0' } }),
+        : Promise.resolve({
+            data: [],
+            headers: { 'x-pagination-total': '0' },
+            status: 200,
+            statusText: 'OK',
+            config: {} as any
+          }),
     enabled: !!selectedUser?.id,
-  });
+});
 
   const deleteTodoMutation = useMutation({
     mutationFn: todoApi.deleteTodo,
