@@ -20,11 +20,10 @@ const MyPostsPage = () => {
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
-    // Only show redirect modal if we're sure there's no selected user
     if (!selectedUser && !isRedirectModalOpen) {
       setIsRedirectModalOpen(true);
     }
-  }, [selectedUser]);
+  }, [selectedUser, isRedirectModalOpen]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['my-posts', selectedUser?.id, page, pageSize],

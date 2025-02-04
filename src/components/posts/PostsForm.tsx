@@ -24,7 +24,6 @@ export const PostForm: React.FC<PostFormProps> = ({ initialData, onSubmit }) => 
   const { selectedUser } = useUser();
 
   const invalidateQueries = () => {
-    // Invalidate both all posts and my posts queries
     queryClient.invalidateQueries({ queryKey: ['posts'] });
     if (selectedUser) {
       queryClient.invalidateQueries({ queryKey: ['my-posts', selectedUser.id] });

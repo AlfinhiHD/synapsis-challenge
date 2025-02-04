@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
     <AntHeader className="bg-white shadow px-4 lg:px-6 h-16 flex items-center justify-between">
       <div className="flex items-center flex-1">
         <Link href="/" className="text-xl font-bold mr-8 flex-shrink-0">
-          Todos & Posts Website!
+          Todos & Posts or Blog Website!
         </Link>
 
         <div className="hidden md:flex gap-6 text-lg items-center">

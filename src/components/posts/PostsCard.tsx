@@ -49,11 +49,19 @@ export const PostCard: React.FC<PostCardProps> = ({
     enabled: showComments,
   });
 
+  
+  const invalidateQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+    if (selectedUser) {
+      queryClient.invalidateQueries({ queryKey: ['my-posts', selectedUser.id] });
+    }
+  };
+
   const deletePostMutation = useMutation({
     mutationFn: postsApi.deletePost,
     onSuccess: () => {
       message.success("Post deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      invalidateQueries()
     },
     onError: (error: any) => {
       const formErrors = formatApiErrors(error);
