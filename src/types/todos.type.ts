@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export enum TodoStatus {
     Pending = "pending",
     Completed = "completed"
@@ -9,4 +11,10 @@ export interface TodoType {
     title: string;
     due_on: string;
     status: TodoStatus;
+  }
+
+  export type AddTodoType = {
+    title: string;
+    due_on: Dayjs;
+    status: string;
   }
