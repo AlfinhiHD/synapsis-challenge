@@ -54,7 +54,6 @@ export const PostCard: React.FC<PostCardProps> = ({
     onSuccess: () => {
       message.success("Post deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["posts", selectedUser?.id] });
     },
     onError: (error: any) => {
       const formErrors = formatApiErrors(error);
