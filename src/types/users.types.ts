@@ -27,3 +27,10 @@ export enum UserGender {
     selectedUser: UserType | null;
     setSelectedUser: (user: UserType | null) => void;
   }
+
+  export type MenuItemType = {
+    key: string;
+    label: React.ReactNode;
+    children?: MenuItemType[];
+  };
+  

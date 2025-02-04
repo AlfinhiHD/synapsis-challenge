@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Space, Modal, message, Tooltip } from 'antd';
+import { Table, Button, Space, Modal, message, Tooltip, Breakpoint } from 'antd';
 import { EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UserType, UserStatus } from '@/types/users.types';
@@ -67,14 +67,14 @@ export const UserTable: React.FC<UserTableProps> = ({
       dataIndex: 'email',
       key: 'email',
       className: 'min-w-[200px]',
-      responsive: ['md'],
+      responsive: ['md'] as Breakpoint[],
     },
     {
       title: 'Gender',
       dataIndex: 'gender',
       key: 'gender',
       className: 'min-w-[100px]',
-      responsive: ['lg'],
+      responsive: ['lg'] as Breakpoint[],
       render: (text: string) => text.charAt(0).toUpperCase() + text.slice(1),
     },
     {
@@ -82,7 +82,7 @@ export const UserTable: React.FC<UserTableProps> = ({
       dataIndex: 'status',
       key: 'status',
       className: 'min-w-[100px]',
-      responsive: ['sm'],
+      responsive: ['sm'] as Breakpoint[],
       render: (status: string) => (
         <span className={status === 'active' ? 'text-green-600' : 'text-red-600'}>
           {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -92,9 +92,9 @@ export const UserTable: React.FC<UserTableProps> = ({
     {
       title: 'Actions',
       key: 'actions',
-      fixed: 'right',
+      // fixed: 'right',
       className: 'min-w-[200px]',
-      render: (_: any, record: UserType) => (
+      render: (_: unknown, record: UserType) => (
         <Space wrap className="flex flex-wrap gap-2">
           <Tooltip 
             title={record.status === UserStatus.Inactive ? 'Cannot set inactive user as profile' : 
