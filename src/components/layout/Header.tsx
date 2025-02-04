@@ -67,20 +67,29 @@ export const Header: React.FC = () => {
 
   return (
     <AntHeader className="bg-white shadow px-4 lg:px-6 h-16 flex items-center justify-between">
-      {/* Logo and Desktop Menu */}
       <div className="flex items-center flex-1">
         <Link href="/" className="text-xl font-bold mr-8 flex-shrink-0">
-          User Management
+          Todos & Posts Website!
         </Link>
 
         <div className="hidden md:flex gap-6 text-lg items-center">
           {menuItems.map((item) =>
             item.children ? (
-              <Dropdown key={item.key} menu={{ items: item.children }} trigger={["hover"]}>
-                <span className="cursor-pointer hover:text-blue-600">{item.label}</span>
+              <Dropdown
+                key={item.key}
+                menu={{ items: item.children }}
+                trigger={["hover"]}
+              >
+                <span className="cursor-pointer hover:text-blue-600">
+                  {item.label}
+                </span>
               </Dropdown>
             ) : (
-              <Link key={item.key} href={`/${item.key}`} className="hover:text-blue-600">
+              <Link
+                key={item.key}
+                href={`/${item.key}`}
+                className="hover:text-blue-600"
+              >
                 {item.label}
               </Link>
             )
@@ -88,10 +97,12 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Side - Profile & Mobile Menu Button */}
       <div className="flex items-center gap-4">
-        {/* Profile Dropdown */}
-        <Dropdown overlay={profileMenu} trigger={["click"]} placement="bottomRight">
+        <Dropdown
+          overlay={profileMenu}
+          trigger={["click"]}
+          placement="bottomRight"
+        >
           <div className="flex items-center gap-3 cursor-pointer">
             <div className="hidden sm:block text-right max-w-[200px]">
               {selectedUser ? (
@@ -102,25 +113,29 @@ export const Header: React.FC = () => {
             </div>
             <Avatar
               icon={<UserOutlined />}
-              className={selectedUser?.status === "active" ? "bg-green-500" : "bg-gray-400"}
+              className={
+                selectedUser?.status === "active"
+                  ? "bg-green-500"
+                  : "bg-gray-400"
+              }
             />
           </div>
         </Dropdown>
-
-        {/* Mobile Menu Button */}
         {isMobile && (
-          <Button icon={<MenuOutlined />} onClick={() => setMobileMenuOpen(true)} />
+          <Button
+            icon={<MenuOutlined />}
+            onClick={() => setMobileMenuOpen(true)}
+          />
         )}
       </div>
 
-      {/* Mobile Menu Drawer */}
       <Drawer
         title="Menu"
         placement="right"
         onClose={() => setMobileMenuOpen(false)}
         open={mobileMenuOpen}
         width={280}
-        bodyStyle={{ padding: 0 }}
+        style={{ padding: 0 }}
       >
         <Menu
           mode="inline"

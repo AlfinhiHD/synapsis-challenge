@@ -1,12 +1,29 @@
-import React, { useState } from 'react';
-import { Card, Button, Modal, Form, Input, Space, List, Avatar, message, Tag, Tooltip } from 'antd';
-import { CommentOutlined, DeleteOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PostType } from '@/types/posts.types';
-import { CommentType } from '@/types/comments.type';
-import { postsApi } from '@/services/posts.service';
-import { useUser } from '@/context/UserContext';
-import { formatApiErrors } from '@/utils/apiError';
+import React, { useState } from "react";
+import {
+  Card,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Space,
+  List,
+  Avatar,
+  message,
+  Tag,
+  Tooltip,
+} from "antd";
+import {
+  CommentOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { PostType } from "@/types/posts.types";
+import { CommentType } from "@/types/comments.type";
+import { postsApi } from "@/services/posts.service";
+import { useUser } from "@/context/UserContext";
+import { formatApiErrors } from "@/utils/apiError";
 
 interface PostCardProps {
   post: PostType;
@@ -16,25 +33,28 @@ interface PostCardProps {
 
 const { TextArea } = Input;
 
-export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => {
+export const PostCard: React.FC<PostCardProps> = ({
+  post,
+  isOwner,
+  onEdit,
+}) => {
   const [showComments, setShowComments] = useState(false);
   const [commentForm] = Form.useForm();
   const queryClient = useQueryClient();
   const { selectedUser } = useUser();
 
-  // Get comments for this post
   const { data: commentsData, isLoading: isLoadingComments } = useQuery({
-    queryKey: ['comments', post.id],
+    queryKey: ["comments", post.id],
     queryFn: () => postsApi.getPostComments(post.id),
     enabled: showComments,
   });
 
-  // Mutations
   const deletePostMutation = useMutation({
     mutationFn: postsApi.deletePost,
     onSuccess: () => {
-      message.success('Post deleted successfully');
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      message.success("Post deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["posts", selectedUser?.id] });
     },
     onError: (error: any) => {
       const formErrors = formatApiErrors(error);
@@ -45,12 +65,17 @@ export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => 
   });
 
   const createCommentMutation = useMutation({
-    mutationFn: ({ postId, data }: { postId: number; data: { name: string; email: string; body: string } }) =>
-      postsApi.createComment(postId, data),
+    mutationFn: ({
+      postId,
+      data,
+    }: {
+      postId: number;
+      data: { name: string; email: string; body: string };
+    }) => postsApi.createComment(postId, data),
     onSuccess: () => {
-      message.success('Comment added successfully');
+      message.success("Comment added successfully");
       commentForm.resetFields();
-      queryClient.invalidateQueries({ queryKey: ['comments', post.id] });
+      queryClient.invalidateQueries({ queryKey: ["comments", post.id] });
     },
     onError: (error: any) => {
       const formErrors = formatApiErrors(error);
@@ -69,8 +94,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => 
   const deleteCommentMutation = useMutation({
     mutationFn: postsApi.deleteComment,
     onSuccess: () => {
-      message.success('Comment deleted successfully');
-      queryClient.invalidateQueries({ queryKey: ['comments', post.id] });
+      message.success("Comment deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["comments", post.id] });
     },
     onError: (error: any) => {
       const formErrors = formatApiErrors(error);
@@ -82,15 +107,15 @@ export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => 
 
   const handleDeletePost = () => {
     Modal.confirm({
-      title: 'Delete Post',
-      content: 'Are you sure you want to delete this post?',
+      title: "Delete Post",
+      content: "Are you sure you want to delete this post?",
       onOk: () => deletePostMutation.mutate(post.id),
     });
   };
 
   const handleAddComment = async (values: { body: string }) => {
     if (!selectedUser) {
-      message.error('Please select a profile first');
+      message.error("Please select a profile first");
       return;
     }
 
@@ -106,8 +131,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => 
 
   const handleDeleteComment = (commentId: number) => {
     Modal.confirm({
-      title: 'Delete Comment',
-      content: 'Are you sure you want to delete this comment?',
+      title: "Delete Comment",
+      content: "Are you sure you want to delete this comment?",
       onOk: () => deleteCommentMutation.mutate(commentId),
     });
   };
@@ -151,23 +176,17 @@ export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => 
       <Card.Meta
         title={post.title}
         description={
-          <div className="whitespace-pre-wrap mt-2">
-            {post.body}
-          </div>
+          <div className="whitespace-pre-wrap mt-2">{post.body}</div>
         }
       />
 
       {showComments && (
         <div className="mt-4">
-          <Form
-            form={commentForm}
-            onFinish={handleAddComment}
-            className="mb-4"
-          >
+          <Form form={commentForm} onFinish={handleAddComment} className="mb-4">
             <Form.Item
               name="body"
-              rules={[{ required: true, message: 'Please write your comment' }]}
-              help={selectedUser ? undefined : 'Select a profile to comment'}
+              rules={[{ required: true, message: "Please write your comment" }]}
+              help={selectedUser ? undefined : "Select a profile to comment"}
             >
               <TextArea
                 rows={3}
@@ -219,7 +238,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post, isOwner, onEdit }) => 
                   }
                   description={
                     <div>
-                      <div className="text-gray-500 text-sm mb-1">{comment.email}</div>
+                      <div className="text-gray-500 text-sm mb-1">
+                        {comment.email}
+                      </div>
                       <div>{comment.body}</div>
                     </div>
                   }

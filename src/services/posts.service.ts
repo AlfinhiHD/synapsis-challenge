@@ -4,7 +4,6 @@ import instance from "@/utils/axios";
 import { handleApiError } from "@/utils/apiError";
 
 export const postsApi = {
-  // Posts
   getPosts: async (page: number = 1, per_page: number = 10) => {
     try {
       const response = await instance.get<PostType[]>(`/posts?page=${page}&per_page=${per_page}`);
@@ -52,7 +51,6 @@ export const postsApi = {
     }
   },
 
-  // Comments
   getPostComments: async (postId: number, page: number = 1, per_page: number = 10) => {
     try {
       const response = await instance.get<CommentType[]>(`/posts/${postId}/comments?page=${page}&per_page=${per_page}`);

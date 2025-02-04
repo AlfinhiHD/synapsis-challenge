@@ -8,8 +8,11 @@ import { useUser } from '@/context/UserContext';
 import PostCard from '@/components/posts/PostsCard';
 import PostForm from '@/components/posts/PostsForm';
 
+
 const AllPostsPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState<PostType | null>(null);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const { selectedUser } = useUser();
@@ -22,6 +25,11 @@ const AllPostsPage = () => {
   const handlePageChange = (newPage: number, newPageSize: number) => {
     setPage(newPage);
     setPageSize(newPageSize);
+  };
+
+  const handleEditPost = (post: PostType) => {
+    setEditingPost(post);
+    setIsEditModalOpen(true);
   };
 
   return (
@@ -42,7 +50,7 @@ const AllPostsPage = () => {
           <Button
             type="primary"
             icon={<PlusOutlined />}
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsCreateModalOpen(true)}
           >
             Create Post
           </Button>
@@ -62,6 +70,7 @@ const AllPostsPage = () => {
               key={post.id}
               post={post}
               isOwner={post.user_id === selectedUser?.id}
+              onEdit={handleEditPost}
             />
           ))
         )}
@@ -78,14 +87,35 @@ const AllPostsPage = () => {
         />
       </div>
 
+      {/* Create Post Modal */}
       <Modal
         title="Create Post"
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
+        open={isCreateModalOpen}
+        onCancel={() => setIsCreateModalOpen(false)}
         footer={null}
         destroyOnClose
       >
-        <PostForm onSubmit={() => setIsModalOpen(false)} />
+        <PostForm onSubmit={() => setIsCreateModalOpen(false)} />
+      </Modal>
+
+      {/* Edit Post Modal */}
+      <Modal
+        title="Edit Post"
+        open={isEditModalOpen}
+        onCancel={() => {
+          setIsEditModalOpen(false);
+          setEditingPost(null);
+        }}
+        footer={null}
+        destroyOnClose
+      >
+        <PostForm
+          initialData={editingPost}
+          onSubmit={() => {
+            setIsEditModalOpen(false);
+            setEditingPost(null);
+          }}
+        />
       </Modal>
     </div>
   );

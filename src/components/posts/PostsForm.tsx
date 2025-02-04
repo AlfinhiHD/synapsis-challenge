@@ -23,12 +23,20 @@ export const PostForm: React.FC<PostFormProps> = ({ initialData, onSubmit }) => 
   const queryClient = useQueryClient();
   const { selectedUser } = useUser();
 
+  const invalidateQueries = () => {
+    // Invalidate both all posts and my posts queries
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+    if (selectedUser) {
+      queryClient.invalidateQueries({ queryKey: ['my-posts', selectedUser.id] });
+    }
+  };
+
   const createPostMutation = useMutation({
     mutationFn: (data: PostFormData) => 
       selectedUser ? postsApi.createPost(selectedUser.id, data) : Promise.reject('No user selected'),
     onSuccess: () => {
       message.success('Post created successfully');
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      invalidateQueries();
       onSubmit();
     },
     onError: (error: any) => {
@@ -50,7 +58,7 @@ export const PostForm: React.FC<PostFormProps> = ({ initialData, onSubmit }) => 
       initialData ? postsApi.updatePost(initialData.id, data) : Promise.reject('No post selected'),
     onSuccess: () => {
       message.success('Post updated successfully');
-      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      invalidateQueries();
       onSubmit();
     },
     onError: (error: any) => {
@@ -79,7 +87,7 @@ export const PostForm: React.FC<PostFormProps> = ({ initialData, onSubmit }) => 
     <Form
       form={form}
       layout="vertical"
-      initialValues={initialData ?? undefined}
+      initialValues={initialData?? undefined}
       onFinish={handleSubmit}
     >
       <Form.Item
