@@ -22,6 +22,7 @@ export const Header: React.FC = () => {
 
     setMenuItems([
       { key: "users", label: <Link href="/users">Users</Link> },
+      { key: "todos", label: <Link href="/todos">My Todos</Link> },
       {
         key: "posts",
         label: "Posts",
@@ -30,7 +31,6 @@ export const Header: React.FC = () => {
           { key: "my-posts", label: <Link href="/posts/my">My Posts</Link> },
         ],
       },
-      { key: "todos", label: <Link href="/todos">Todos</Link> },
     ]);
 
     handleResize();
